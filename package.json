@@ -1,0 +1,23 @@
+{
+  "name": "kelp-send",
+  "version": "1.0.0",
+  "description": "ultimate library for send response",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/song940/kelp-send.git"
+  },
+  "author": "lsong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/song940/kelp-send/issues"
+  },
+  "homepage": "https://github.com/song940/kelp-send#readme",
+  "keywords": [
+    "kelp",
+    "send"
+  ]
+}
