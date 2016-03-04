@@ -1,6 +1,6 @@
 {
   "name": "kelp-send",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ultimate library for send response",
   "main": "index.js",
   "scripts": {

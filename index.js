@@ -1,4 +1,5 @@
 'use strict';
+const Stream = require('stream');
 const STATUS = require('./status');
 /**
  * [function description]
@@ -22,7 +23,10 @@ module.exports = function(req, res, next){
 
     if(type == 'object' && body.then)
       type = 'promise';
-
+      
+    if(type == 'object' && (body instanceof Stream))
+      type = 'stream';
+      
     switch(type){
       case 'string':
       case 'uint8array':
