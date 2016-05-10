@@ -28,19 +28,15 @@ module.exports = function(req, res, next){
       type = 'stream';
       
     switch(type){
-      case 'string':
-      case 'uint8array':
-        res.end(body);
-        break;
       case 'number':
         res.writeHead(body);
-        res.end(STATUS[ body ]);
+        res.send(STATUS[ body ]);
         break;
       case 'function':
         res.send(body(res.send));
         break;
       case 'error':
-        res.end(body.stack);
+        res.send(body.stack);
         break;
       case 'promise':
         body.then(res.send, res.send);
@@ -48,9 +44,15 @@ module.exports = function(req, res, next){
       case 'stream':
         body.pipe(res);
         break;
+      case 'array':
       case 'object':
-        res.setHeader('Content-Type', 'application/json; charset=utf-8');
-        res.end(JSON.stringify(body));
+        var type = 'application/json; charset=utf-8';
+        res.setHeader('Content-Type', type);
+        res.send(JSON.stringify(body));
+        break;
+      case 'string':
+      case 'uint8array':
+        res.end(body);
         break;
       default:
         res.end();

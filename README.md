@@ -4,7 +4,7 @@ ultimate library for send response
 
 ### Installation
 ```bash
-$ npm install kelp-send
+$ npm install kelp-send --save
 ```
 
 ### Example
