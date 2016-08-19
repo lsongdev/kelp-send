@@ -9,6 +9,46 @@ const STATUS = require('./status');
  * @return {[type]}        [description]
  */
 module.exports = function(req, res, next){
+
+  /**
+   * [CONTENT_TYPES description]
+   * @type {Object}
+   */
+  const CONTENT_TYPES = {
+    text : 'text/plain'           ,
+    html : 'text/html'            ,
+    xml  : 'application/xml'      ,
+    xhtml: 'application/xhtml+xml',
+    json : 'application/json'     ,
+    png  : 'image/png'            ,
+    mpeg : 'video/mpeg'           ,
+    webp : 'image/webp'           ,
+  };
+  /**
+   * [type description]
+   * @param  {[type]} type    [description]
+   * @param  {[type]} options [description]
+   * @return {[type]}         [description]
+   */
+  res.type = function(type, options){
+    type = CONTENT_TYPES[ type ] || type;
+    options = Object.keys(options || {}).map(function(name){
+      return [ name, options[ name ] ].join('=');
+    }).join('; ');
+    res.setHeader('Content-Type', type + (options ? ('; ' + options) : ''));
+    return res;
+  };
+  
+  /**
+   * [status description]
+   * @param  {[type]} code [description]
+   * @return {[type]}      [description]
+   */
+  res.status = function(code){
+    this.statusCode = code;
+    return res;
+  };
+  
   /**
    * [send description]
    * @param  {[type]} body [description]
@@ -29,25 +69,24 @@ module.exports = function(req, res, next){
       
     switch(type){
       case 'number':
-        res.writeHead(body);
+        res.status(body);
         res.send(STATUS[ body ]);
         break;
       case 'function':
-        res.send(body(res.send));
+        body = body(res.send);
+        body && res.send(body);
         break;
       case 'error':
         res.send(body.stack);
         break;
       case 'promise':
-        body.then(res.send, res.send);
+        body.then(res.send, next);
         break;
       case 'stream':
         body.pipe(res);
         break;
       case 'array':
       case 'object':
-        var type = 'application/json; charset=utf-8';
-        res.setHeader('Content-Type', type);
         res.send(JSON.stringify(body));
         break;
       case 'string':
@@ -58,6 +97,7 @@ module.exports = function(req, res, next){
         res.end();
         break;
     }
+    return res;
   };
   next();
 };
