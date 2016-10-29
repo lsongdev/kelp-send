@@ -19,8 +19,5 @@
   "keywords": [
     "kelp",
     "send"
-  ],
-  "devDependencies": {
-    "kelp": "^1.0.5"
-  }
+  ]
 }

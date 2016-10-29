@@ -11,7 +11,7 @@ const STATUS = require('./status');
 module.exports = function(req, res, next){
 
   /**
-   * [CONTENT_TYPES description]
+   * [short-hands]
    * @type {Object}
    */
   const CONTENT_TYPES = {
@@ -87,6 +87,7 @@ module.exports = function(req, res, next){
         break;
       case 'array':
       case 'object':
+        res.type('json');
         res.send(JSON.stringify(body));
         break;
       case 'string':
