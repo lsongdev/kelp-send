@@ -38,6 +38,16 @@ module.exports = function(req, res, next){
     res.setHeader('Content-Type', type + (options ? ('; ' + options) : ''));
     return res;
   };
+  /**
+   * [header description]
+   * @param  {[type]} name  [description]
+   * @param  {[type]} value [description]
+   * @return {[type]}       [description]
+   */
+  res.header = function(name, value){
+    res.setHeader(name, value);
+    return res;
+  };
   
   /**
    * [status description]
@@ -56,13 +66,10 @@ module.exports = function(req, res, next){
    * @param  {[type]} headers [description]
    * @return {[type]}         [description]
    */
-  res.redirect = function(url, code, headers){
-    code = code || 302;
-    headers = headers || {};
-    headers.Location = url;
-    response.writeHead(code, headers);
-    response.end();
-    return res;
+  res.redirect = function(url, code){
+    this.status(code || 302);
+    this.header('Location', url);
+    return res.end();
   };
   
   /**
