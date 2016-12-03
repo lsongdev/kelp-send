@@ -1,6 +1,21 @@
 'use strict';
 const Stream = require('stream');
 const STATUS = require('./status');
+
+/**
+ * [short-hands]
+ * @type {Object}
+ */
+const CONTENT_TYPES = {
+  text : 'text/plain'           ,
+  html : 'text/html'            ,
+  xml  : 'application/xml'      ,
+  xhtml: 'application/xhtml+xml',
+  json : 'application/json'     ,
+  png  : 'image/png'            ,
+  mpeg : 'video/mpeg'           ,
+  webp : 'image/webp'           ,
+};
 /**
  * [function description]
  * @param  {[type]}   req  [description]
@@ -9,21 +24,6 @@ const STATUS = require('./status');
  * @return {[type]}        [description]
  */
 module.exports = function(req, res, next){
-
-  /**
-   * [short-hands]
-   * @type {Object}
-   */
-  const CONTENT_TYPES = {
-    text : 'text/plain'           ,
-    html : 'text/html'            ,
-    xml  : 'application/xml'      ,
-    xhtml: 'application/xhtml+xml',
-    json : 'application/json'     ,
-    png  : 'image/png'            ,
-    mpeg : 'video/mpeg'           ,
-    webp : 'image/webp'           ,
-  };
   /**
    * [type description]
    * @param  {[type]} type    [description]
@@ -46,6 +46,22 @@ module.exports = function(req, res, next){
    */
   res.status = function(code){
     this.statusCode = code;
+    return res;
+  };
+
+  /**
+   * [redirect description]
+   * @param  {[type]} url     [description]
+   * @param  {[type]} code    [description]
+   * @param  {[type]} headers [description]
+   * @return {[type]}         [description]
+   */
+  res.redirect = function(url, code, headers){
+    code = code || 302;
+    headers = headers || {};
+    headers.Location = url;
+    response.writeHead(code, headers);
+    response.end();
     return res;
   };
   
