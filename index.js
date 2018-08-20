@@ -84,11 +84,14 @@ module.exports = function(req, res, next){
       .match(/^\[object (\w+)\]$/)[1]
       .toLowerCase();
 
-    if(type == 'object' && body.then)
+    if(type === 'object' && body.then)
       type = 'promise';
       
-    if(type == 'object' && (body instanceof Stream))
+    if(type === 'object' && (body instanceof Stream))
       type = 'stream';
+    
+    if(type === 'object' && (body instanceof Buffer))
+      type = 'buffer';
       
     switch(type){
       case 'number':
@@ -96,7 +99,7 @@ module.exports = function(req, res, next){
         res.send(STATUS[ body ]);
         break;
       case 'function':
-        body = body(res.send);
+        body = body(req, res);
         body && res.send(body);
         break;
       case 'error':
@@ -114,6 +117,7 @@ module.exports = function(req, res, next){
         res.send(JSON.stringify(body));
         break;
       case 'string':
+      case 'buffer':
       case 'uint8array':
         res.end(body);
         break;
