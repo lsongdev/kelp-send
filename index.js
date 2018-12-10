@@ -1,6 +1,7 @@
 'use strict';
 const Stream = require('stream');
 const STATUS = require('./status');
+const Response = require('./response');
 
 /**
  * [short-hands]
@@ -77,7 +78,7 @@ module.exports = function(req, res, next){
    * @param  {[type]} body [description]
    * @return {[type]}      [description]
    */
-  res.send = function send(body){
+  res.send = body => {
     var type = ({})
       .toString
       .call(body)
@@ -92,6 +93,9 @@ module.exports = function(req, res, next){
     
     if(type === 'object' && (body instanceof Buffer))
       type = 'buffer';
+
+    if(type === 'object' && (body instanceof Response))
+      type = 'response';
       
     switch(type){
       case 'number':
@@ -120,6 +124,9 @@ module.exports = function(req, res, next){
       case 'buffer':
       case 'uint8array':
         res.end(body);
+        break;
+      case 'response':
+        body.respond(req, res);
         break;
       default:
         res.end();
