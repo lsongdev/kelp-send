@@ -1,7 +1,7 @@
 'use strict';
 const Stream = require('stream');
-const STATUS = require('./status');
 const Response = require('./response');
+const { STATUS_CODES } = require('http');
 
 /**
  * [short-hands]
@@ -17,6 +17,7 @@ const CONTENT_TYPES = {
   mpeg : 'video/mpeg'           ,
   webp : 'image/webp'           ,
 };
+
 /**
  * [function description]
  * @param  {[type]}   req  [description]
@@ -24,7 +25,7 @@ const CONTENT_TYPES = {
  * @param  {Function} next [description]
  * @return {[type]}        [description]
  */
-module.exports = function(req, res, next){
+function send(req, res, next){
   /**
    * [type description]
    * @param  {[type]} type    [description]
@@ -100,7 +101,7 @@ module.exports = function(req, res, next){
     switch(type){
       case 'number':
         res.status(body);
-        res.send(STATUS[ body ]);
+        res.send(STATUS_CODES[body]);
         break;
       case 'function':
         body = body(req, res);
@@ -134,5 +135,7 @@ module.exports = function(req, res, next){
     }
     return res;
   };
-  next();
+  return next();
 };
+
+module.exports = send;
